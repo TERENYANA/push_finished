@@ -27,15 +27,10 @@ typedef struct s_stack
 	struct s_stack	*next;
 }					t_stack;
 
-// Парсинг
-int					is_valid_number(char *str);
-int					ft_isspace(int c);
-int					ft_isdigit(int c);
-long				ft_atol(char *str);
-int					has_duplicate(t_stack *stack, int num);
+// Parsing
 t_stack				*parse_args(int argc, char **argv);
 
-// Стек - утилиты
+// Stack utilities
 t_stack				*new_node(int value);
 void				stack_add_bottom(t_stack **stack, int value);
 int					stack_size(t_stack *stack);
@@ -44,7 +39,7 @@ int					is_sorted(t_stack *stack);
 t_stack				*find_min(t_stack *stack);
 t_stack				*find_max(t_stack *stack);
 
-// Операции
+// Operations
 void				sa(t_stack **a);
 void				sb(t_stack **b);
 void				ss(t_stack **a, t_stack **b);
@@ -57,7 +52,7 @@ void				rra(t_stack **a);
 void				rrb(t_stack **b);
 void				rrr(t_stack **a, t_stack **b);
 
-// Алгоритм
+// Algorithm
 void				push_swap(t_stack **a, t_stack **b);
 void				turk_algorithm(t_stack **a, t_stack **b);
 void				sort_three(t_stack **a);
@@ -68,7 +63,14 @@ t_stack				*find_cheapest(t_stack *b);
 void				move_cheapest(t_stack **a, t_stack **b);
 void				final_rotation(t_stack **a);
 
-// Ошибки
+// Utilities (shared helpers)
+long				ft_atol(char *str);
+int					is_valid_number(char *str);
+int					has_duplicate(t_stack *stack, int num);
+void				do_rotation(t_stack **stack, int is_stack_a,
+						int is_reverse);
+
+// Errors
 void				error_exit(char *msg, t_stack *a, t_stack *b);
 void				free_stack(t_stack *stack);
 

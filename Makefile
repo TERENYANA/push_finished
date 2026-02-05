@@ -16,7 +16,8 @@ SRCS = main.c \
        algorithm/sort_small.c \
        algorithm/targets.c \
        algorithm/costs.c \
-       algorithm/execute.c
+       algorithm/execute.c \
+       algorithm/utils.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -27,7 +28,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-%.o: %.c
+%.o: %.c includes/push_swap.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:

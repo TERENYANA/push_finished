@@ -12,23 +12,20 @@
 
 #include "push_swap.h"
 
-static void	rotate_both(t_stack **a, t_stack **b, t_stack *cheapest)
+static void	rotate_both_stacks(t_stack **a, t_stack **b, t_stack *cheapest,
+				int *sizes)
 {
 	while (cheapest->cost_a > 0 && cheapest->cost_b > 0
-		&& cheapest->index <= stack_size(*b) / 2
-		&& cheapest->target->index <= stack_size(*a) / 2)
+		&& cheapest->index <= sizes[1] / 2
+		&& cheapest->target->index <= sizes[0] / 2)
 	{
 		rr(a, b);
 		cheapest->cost_a--;
 		cheapest->cost_b--;
 	}
-}
-
-static void	reverse_both(t_stack **a, t_stack **b, t_stack *cheapest)
-{
 	while (cheapest->cost_a > 0 && cheapest->cost_b > 0
-		&& cheapest->index > stack_size(*b) / 2
-		&& cheapest->target->index > stack_size(*a) / 2)
+		&& cheapest->index > sizes[1] / 2
+		&& cheapest->target->index > sizes[0] / 2)
 	{
 		rrr(a, b);
 		cheapest->cost_a--;
@@ -36,39 +33,19 @@ static void	reverse_both(t_stack **a, t_stack **b, t_stack *cheapest)
 	}
 }
 
-static void	rotate_a(t_stack **a, t_stack *cheapest)
-{
-	while (cheapest->cost_a > 0)
-	{
-		if (cheapest->target->index <= stack_size(*a) / 2)
-			ra(a);
-		else
-			rra(a);
-		cheapest->cost_a--;
-	}
-}
-
-static void	rotate_b(t_stack **b, t_stack *cheapest)
-{
-	while (cheapest->cost_b > 0)
-	{
-		if (cheapest->index <= stack_size(*b) / 2)
-			rb(b);
-		else
-			rrb(b);
-		cheapest->cost_b--;
-	}
-}
-
 void	move_cheapest(t_stack **a, t_stack **b)
 {
 	t_stack	*cheapest;
+	int		sizes[2];
 
 	cheapest = find_cheapest(*b);
-	rotate_both(a, b, cheapest);
-	reverse_both(a, b, cheapest);
-	rotate_a(a, cheapest);
-	rotate_b(b, cheapest);
+	sizes[0] = stack_size(*a);
+	sizes[1] = stack_size(*b);
+	rotate_both_stacks(a, b, cheapest, sizes);
+	while (cheapest->cost_a-- > 0)
+		do_rotation(a, 1, cheapest->target->index > sizes[0] / 2);
+	while (cheapest->cost_b-- > 0)
+		do_rotation(b, 0, cheapest->index > sizes[1] / 2);
 	pa(a, b);
 }
 
@@ -80,10 +57,5 @@ void	final_rotation(t_stack **a)
 	min = find_min(*a);
 	size = stack_size(*a);
 	while (*a != min)
-	{
-		if (min->index <= size / 2)
-			ra(a);
-		else
-			rra(a);
-	}
+		do_rotation(a, 1, min->index > size / 2);
 }
